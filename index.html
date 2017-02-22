@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>for Animal lovers</title>
+  <script src="http://code.jquery.com/jquery-2.1.3.min.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        <!-- <link rel="stylesheet" href="assets/css/animate.css"> -->
+   <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/reset.css">
+  <!-- <style type="text/css">
+    button,
+    div,
+    form,
+    input {
+      margin: 10px;
+    }
+  </style> -->
+</head>
+
+<body>
+
+  <div class="container">
+      <img id="logo" src="assets/images/Paws.png">
+      <br>
+    <h1>Animal Lovers Search</h1>
+
+    <!-- div to render buttons created by the script  -->
+    <div id="button-render"></div>
+<!-- create form to get user input for which animal buttons to add  -->
+    <form id="Animal-form">
+<!--for="animal-input"-->      
+ <label>Add your favorite animal here: </label>
+      
+      <!-- Button triggers new animal to be added -->
+      <input type="text" id="animal-input"><br>
+
+      <input id="add-animal" type="submit" value="Add an animal">
+    </form>
+    <br>
+    <!-- div to render output when button is pressed  --> 
+    <div id="animal-view"> </div>
+
+    
+    <script type="text/javascript">
+      // Initial array of animals
+      var topics = ["elephant", "mouse", "dog", "cat"];
+
+      // displayanimalpics function displays the specific animal pic that you click on
+       function displayanimalpics() {
+
+         var anml = $(this).attr("data-name");
+        
+         var queryURL = "http://api.giphy.com/v1/gifs/search?api_key=dc6zaTOxFJmzC&limit=1&q="+ anml;
+        
+          // var queryURL = "http://api.giphy.com/v1/gifs/random?api_key=dc6zaTOxFJmzC&tag="+ anml;
+
+       // Creating an AJAX call for the specific movie button being clicked
+        $.ajax({
+          url: queryURL,
+          method: "GET"
+        }).done(function(response) {
+
+          // Creating a new div to hold the animal images
+         var animalDiv = $("<div class='anim'>");
+// --------------------------------------------------------------------------------------------------------
+          // Storing the rating data
+          // var rating = response.Rated;
+
+          // Creating an element to have the rating displayed
+          // var pOne = $("<p>").text("Rating: " + rating);
+
+          // // Displaying the rating
+          // movieDiv.append(pOne);
+
+          // // Storing the release year
+          // var released = response.Released;
+
+          // // Creating an element to hold the release year
+          // var pTwo = $("<p>").text("Released: " + released);
+
+          // // Displaying the release year
+          // movieDiv.append(pTwo);
+
+          // // Storing the plot
+          // var plot = response.Plot;
+
+          // // Creating an element to hold the plot
+          // var pThree = $("<p>").text("Plot: " + plot);
+
+          // // Appending the plot
+          // movieDiv.append(pThree);
+// -----------------------------------------------------------------------------------------------
+          // Retrieving the URL for the image
+          // var imgURL = response.data.fixed_width_small_still_url;
+          // var anm_imgURL = response.data.image_original_url;
+          var imgURL = response.data[0].images.fixed_height_still.url;
+
+          // Creating an image element to hold the image
+          var image = $("<img>").attr("src", imgURL);
+          //   image.attr("data-state", "still");
+          //   image.attr("data-still", imgURL);
+          //   image.attr("data-animate", anm_imgURL);
+          // image.addClass("gif");
+          // Appending the image
+          animalDiv.append(image);
+
+          // replacing the old animal pics with the new ones.
+          $("#animal-view").html(animalDiv);
+        });
+
+      }
+
+// ---------------------------------------------------------------------------------
+      // Function for displaying movie data
+      function renderButtons() {
+
+        // Deleting the movies prior to adding new movies
+        // (this is necessary otherwise you will have repeat buttons)
+     //   $("#buttons-view").empty();
+
+        // Looping through the array of topics
+        for (var i = 0; i < topics.length; i++) {
+
+          // Then dynamicaly generating buttons for each animal in the array
+          // This code $("<button>") is all jQuery needs to create the beginning and end tag. (<button></button>)
+          var a = $("<button>");
+          // Adding a class of anml to our button
+          a.addClass("anml");
+          // Adding a data-attribute
+          a.attr("data-name", topics[i]);
+          // Providing the initial button text
+          a.text(topics[i]);
+          // Adding the button to the buttons-view div
+          $("#button-render").append(a);
+        }
+      }
+
+      // This function execute when the add an animal button is clicked
+      $("#add-animal").on("click", function(event) {
+       //to avoid rendering the buttons already existing in the array
+        $("#button-render").html("");
+        event.preventDefault();
+
+        // This line grabs the input from the textbox
+        var pets = $("#animal-input").val().trim();
+
+        // push the animal entered by the user inside the array
+        topics.push(pets);
+
+        // Calling renderButtons which handles the processing of our animal array
+        renderButtons();
+      });
+
+      //what happens when you click the image?
+      $(".gif").on("click", function() {
+var state = $(this).attr("data-state");
+
+if (state === "still"){
+$(this).attr("src", $(this).attr("data-animate"));
+  $(this).attr("data-state","animate");
+}
+else{
+  $(this).attr("src",$(this).attr("data-still"));
+$(this).attr("data-state","still");
+}
+
+
+
+});
+      // // Adding a click event listener to all elements with a class of "anml", so when clicked it runs the function that retrieves data from the api
+      $(document).on("click", ".anml",displayanimalpics);
+      // Calling the renderButtons function to display the intial buttons
+     
+      renderButtons();
+
+
+    </script> 
+  </div>
+</body>
+
+</html>
