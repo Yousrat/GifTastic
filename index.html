@@ -41,11 +41,11 @@
       var topics = ["elephant", "mouse", "dog", "cat"];
 
       // displayanimalpics function displays the specific animal pic that you click on
-       function displayanimalpics() {
+      function displayanimalpics() {
 
-         var anml = $(this).attr("data-name");
+        var anml = $(this).attr("data-name");
         
-         var queryURL = "http://api.giphy.com/v1/gifs/search?api_key=dc6zaTOxFJmzC&limit=1&q="+ anml;
+        var queryURL = "http://api.giphy.com/v1/gifs/search?api_key=dc6zaTOxFJmzC&limit=10&q="+ anml;
 
        // Creating an AJAX call for the specific movie button being clicked
         $.ajax({
@@ -53,28 +53,27 @@
           method: "GET"
           // execute the below function when done retrieving data from the API
         }).done(function(response) {
-          
-         // define url of still image
-         var imgURL = response.data[0].images.fixed_height_still.url;
-         // define url of animated gif
-         var anm_imgURL = response.data[0].images.fixed_height.url;
-
-          // Creating an image element to hold the image
-          var image = $("<img class='gif'>").attr("src", imgURL);
           //create a new Div with class anim
+          var returnimages = [];
          var animalDiv = $("<div class='anim'>");
-          // //assign attribute to image
-          // // image.addClass("gif");
-          //   image.attr("data-state", "still");
-          //   image.attr("data-still", imgURL);
-          //   image.attr("data-animate", anm_imgURL);
-          
-          // Appending the image
-          animalDiv.append(image);
+           for(var j=0; j<response.data.length; j++){
 
-          // replacing the old animal pics with the new ones.
-          $("#animal-view").html(animalDiv);
+               // define url of still image of each item in the array
+               var imgURL = response.data[j].images.fixed_height_still.url;
+               // define url of animated gif of each item of the
+               var anm_imgURL = response.data[j].images.fixed_height.url;
 
+               // Creating an image element to hold the image
+               var image = $("<img>").attr("src", imgURL);
+               image.addClass("gif")
+               //var imageArray[];
+                // Appending the image
+                animalDiv.append(image);
+
+                // replacing the old animal pics with the new ones.
+                $("#animal-view").html(animalDiv);
+
+              }
 
     $('.gif').on("click", function() {
 
@@ -89,9 +88,6 @@
    $(this).attr("data-state","still");
  }
 });
-
-
-
 
         });
 
@@ -201,7 +197,11 @@
 // var image = {still: response.data[i].images.fixed_height_still.url,
 //   anim: response.data[i].images.fixed_height.url
 // }
-
+ // //assign attribute to image
+          // // image.addClass("gif");
+          //   image.attr("data-state", "still");
+          //   image.attr("data-still", imgURL);
+          //   image.attr("data-animate", anm_imgURL);
         // }
     </script> 
   </div>
