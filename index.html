@@ -34,7 +34,6 @@
     <br>
     <!-- div to render output when button is pressed  --> 
     <div id="animal-view"> </div>
-    <!-- <p id="image-rate"> </p> -->
 
     
     <script type="text/javascript">
@@ -66,14 +65,14 @@
                // define url of animated gif of each item of the
                var anm_imgURL = response.data[j].images.fixed_height.url;
              // retrieve rating for each image
-                // var rating = response.data[j].rating;
-                // console.log(rating);
+                 var rating = response.data[j].rating;
+                 console.log(rating);
              
             
 
 
             // Create a new element to have the rating displayed
-               // var rate = $("<p>").text("Rating: " + rating);
+                var rate = $("<p>").text("Rating: " + rating);
 
               // Create an image element to hold the image
                var image = $("<img>").attr("src", imgURL);
@@ -86,10 +85,13 @@
               
                 // Appending the image
                 animalDiv.append(image);
+                animalDiv.append(rate);
+
                 // prate.append(rate);
                 // replacing the old animal pics with the new ones.
                 // $("#animal-view").html(animalDiv);
                $("#animal-view").html(animalDiv);
+
                // $("#image-rate").append(prate);
 
            
